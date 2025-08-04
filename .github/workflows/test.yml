@@ -1,0 +1,31 @@
+name: Deploy
+env:
+  A: 'a variable'
+  B: 'another variable'
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  
+  build-and-deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+  runs-on: ubuntu-latest
+
+  steps:
+    # we need to deploy the container ourselves.
+    # then we use the new action to orchestrate, i guess. 
+
+    - uses: joshlong/basic-app-github-action@latest
+      with:
+        kubernetes-environment: 'A,B'
+        kubernetes-namespace: 'thegoodestnamespace'
+        gke-service-account-key: 'the SA'
+        gke-zone: 'the zone'
+        gke-cluster: 'joshlong'
+        exposed: true
+        container: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/joshlong-site:latest'
