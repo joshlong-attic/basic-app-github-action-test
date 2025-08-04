@@ -24,5 +24,6 @@ jobs:
           gke-cluster: 'joshlong'
           gke-project: 'joshlong'
           kubernetes-namespace: 'test-ns'
+          service: 'bootiful-test'
           exposed: true
           container: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/joshlong-site:latest'
