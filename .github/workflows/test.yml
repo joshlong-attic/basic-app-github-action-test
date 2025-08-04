@@ -16,7 +16,6 @@ jobs:
       - uses: joshlong/basic-app-github-action@main
         with:
           kubernetes-environment: 'A,B'
-          kubernetes-namespace: 'default'
           gke-service-account-key: ${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}
           gke-zone: 'us-east4'
           gke-cluster: 'joshlong'
