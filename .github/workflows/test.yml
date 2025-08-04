@@ -12,7 +12,7 @@ jobs:
       id-token: "write"
     runs-on: ubuntu-latest
     steps:
-      - uses: joshlong/basic-app-github-action
+      - uses: joshlong/basic-app-github-action@main
         with:
           kubernetes-environment: 'A,B'
           kubernetes-namespace: 'thegoodestnamespace'
