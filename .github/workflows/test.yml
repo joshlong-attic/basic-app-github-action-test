@@ -1,5 +1,6 @@
 name: Deploy
 env:
+  GKE_DEVELOPER_ADVOCACY_SA: ${{ secrets.GKE_DEVELOPER_ADVOCACY_SA }}
   A: 'a variable'
   B: 'another variable'
 on:
@@ -11,13 +12,18 @@ jobs:
       contents: "read"
       id-token: "write"
     runs-on: ubuntu-latest
+
     steps:
+
+
+
       - uses: joshlong/basic-app-github-action@main
         with:
           kubernetes-environment: 'A,B'
-          kubernetes-namespace: 'thegoodestnamespace'
-          gke-service-account-key: 'the SA'
-          gke-zone: 'the zone'
+          kubernetes-namespace: 'default'
+          gke-service-account-key: ${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}
+          gke-zone: 'us-east4'
           gke-cluster: 'joshlong'
+          gke-project: 'joshlong'
           exposed: true
           container: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/joshlong-site:latest'
