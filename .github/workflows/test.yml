@@ -20,6 +20,6 @@ jobs:
           gke-zone: 'us-east4'
           gke-cluster: 'joshlong'
           gke-project: 'joshlong'
-          kubernetes-namespace: 'developer-advocacy'
+          kubernetes-namespace: 'test-ns'
           exposed: true
           container: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/joshlong-site:latest'
