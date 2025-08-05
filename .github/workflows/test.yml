@@ -2,7 +2,8 @@ name: Deploy
 env:
   
   MESSAGE: 'Hello, Developer Advocacy!'
-  CONTAINER_NAME: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/hello-world:latest'
+  # CONTAINER_NAME: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/hello-world:latest'
+  CONTAINER_NAME: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/hello-world@sha256:7bd82060f9d39dd472937f02ab4f6d9560b9932e65ee061b74049104810fcc1f'
   GCLOUD_PROJECT: 'joshlong'
 on:
   push:
@@ -15,28 +16,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-      - uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}'
+      # - uses: 'google-github-actions/auth@v2'
+      #   with:
+      #     credentials_json: '${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}'
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
-        
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '24'
-          distribution: 'graalvm'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache: maven
+      # - name: Set up Docker
+      #   uses: docker/setup-buildx-action@v1
+
+      # - uses: graalvm/setup-graalvm@v1
+      #   with:
+      #     java-version: '24'
+      #     distribution: 'graalvm'
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     cache: maven
       
-      - name: Publish Container
-        run: |
-          gcloud config set project $GCLOUD_PROJECT
-          gcloud --quiet auth configure-docker us-docker.pkg.dev
-          ./mvnw -DskipTests=true -Pnative clean package spring-boot:build-image -Dspring-boot.build-image.imageName=${{ env.CONTAINER_NAME }}
-          docker push ${{ env.CONTAINER_NAME }}
+      # - name: Publish Container
+      #   run: |
+      #     gcloud config set project $GCLOUD_PROJECT
+      #     gcloud --quiet auth configure-docker us-docker.pkg.dev
+      #     ./mvnw -DskipTests=true -Pnative clean package spring-boot:build-image -Dspring-boot.build-image.imageName=${{ env.CONTAINER_NAME }}
+      #     docker push ${{ env.CONTAINER_NAME }}
 
       - uses: joshlong/basic-app-github-action@main
         with:
