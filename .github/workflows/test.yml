@@ -24,6 +24,14 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
 
+      
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+      
       - name: Publish Container
         run: |
           gcloud config set project $GCLOUD_PROJECT
