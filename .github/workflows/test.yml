@@ -1,8 +1,9 @@
 name: Deploy
 env:
-  GKE_DEVELOPER_ADVOCACY_SA: ${{ secrets.GKE_DEVELOPER_ADVOCACY_SA }}
-  A: 'avariable'
-  B: 'anothervariable'
+  
+  MESSAGE: 'Hello, Developer Advocacy!'
+  CONTAINER_NAME: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/hello-world:latest'
+  GCLOUD_PROJECT: 'joshlong'
 on:
   push:
     branches: [ main ]
@@ -14,16 +15,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - uses: actions/checkout@v4
 
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}'
+
+      - run: |
+          gcloud config set project $GCLOUD_PROJECT
+          gcloud --quiet auth configure-docker us-docker.pkg.dev
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '24'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Publish Container
+        run: |
+          ./mvnw -DskipTests=true -Pnative clean package spring-boot:build-image -Dspring-boot.build-image.imageName=${{ env.CONTAINER_NAME }}
+          docker push ${{ env.CONTAINER_NAME }}
 
       - uses: joshlong/basic-app-github-action@main
         with:
-          kubernetes-environment: 'A,B'
+          kubernetes-environment: 'MESSAGE'
           gke-service-account-key: ${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}
           gke-zone: 'us-east4'
           gke-cluster: 'joshlong'
-          gke-project: 'joshlong'
-          kubernetes-namespace: 'test-ns'
-          service: 'bootiful-test'
+          gke-project: ${{ env.GCLOUD_PROJECT }}
+          kubernetes-namespace: 'developer-advocacy-ns'
+          url : 'developeradvocacy.online'
+          service: 'developer-advocacy-online'
           exposed: true
-          container: 'us-docker.pkg.dev/joshlong/developer-advocacy-artifact-registry/joshlong-site:latest'
+          container: ${{ env.CONTAINER_NAME }}
