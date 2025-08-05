@@ -21,22 +21,13 @@ jobs:
         with:
           credentials_json: '${{secrets.GKE_DEVELOPER_ADVOCACY_SA}}'
 
-      - run: |
-          gcloud config set project $GCLOUD_PROJECT
-          gcloud --quiet auth configure-docker us-docker.pkg.dev
-
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '24'
-          distribution: 'graalvm'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache: maven
-
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
 
       - name: Publish Container
         run: |
+          gcloud config set project $GCLOUD_PROJECT
+          gcloud --quiet auth configure-docker us-docker.pkg.dev
           ./mvnw -DskipTests=true -Pnative clean package spring-boot:build-image -Dspring-boot.build-image.imageName=${{ env.CONTAINER_NAME }}
           docker push ${{ env.CONTAINER_NAME }}
 
