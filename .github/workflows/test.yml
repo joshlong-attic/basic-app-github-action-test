@@ -46,7 +46,7 @@ jobs:
           gke-zone: 'us-east4'
           gke-cluster: 'joshlong'
           gke-project: ${{ env.GCLOUD_PROJECT }}
-          kubernetes-namespace: 'developer-advocacy-ns'
+          kubernetes-namespace: 'developer-advocacy-online-ns'
           url : 'developeradvocacy.online'
           service: 'developer-advocacy-online'
           exposed: true
