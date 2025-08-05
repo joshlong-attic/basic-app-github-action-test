@@ -1,2 +1,2 @@
-# basic-app-github-action-test
-a test/throwaway repo to see that everything in basic-app-github-action itself works
+# basic-app-github-action
+sigh. why is deploying to kubernetes so painful. lets hide 90% of it behind a github action.
